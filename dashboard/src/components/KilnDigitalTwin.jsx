@@ -33,10 +33,10 @@ const fragmentShader = `
   }
   
   vec3 heatMapColor(float value) {
-    vec3 cold = vec3(0.1, 0.2, 0.4); // Cool dark blue/grey
-    vec3 warm = vec3(0.8, 0.4, 0.1); // Orange
-    vec3 hot = vec3(1.0, 0.1, 0.1);  // Red
-    vec3 critical = vec3(1.0, 1.0, 0.8); // White-hot
+    vec3 cold = vec3(0.23, 0.43, 0.65); // heat-low (#3A6EA5)
+    vec3 warm = vec3(0.91, 0.58, 0.29); // heat-mid (#E8944A)
+    vec3 hot = vec3(0.91, 0.26, 0.18);  // heat-high (#E8432E)
+    vec3 critical = vec3(0.95, 0.76, 0.31); // signal (#F2C14E)
     
     vec3 color;
     if (value < 0.4) {
@@ -113,7 +113,7 @@ export default function KilnDigitalTwin() {
       </div>
       
       <div style={{ position: 'absolute', bottom: 20, left: 20, zIndex: 10, display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <div style={{ width: 100, height: 8, background: 'linear-gradient(90deg, #1a3366 0%, #cc661a 40%, #ff1a1a 80%, #ffffcc 100%)', borderRadius: 4 }}></div>
+        <div style={{ width: 100, height: 8, background: 'linear-gradient(90deg, var(--heat-low) 0%, var(--heat-mid) 40%, var(--heat-high) 80%, var(--signal) 100%)', borderRadius: 4 }}></div>
         <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Temperature Scale (°C)</span>
       </div>
 
