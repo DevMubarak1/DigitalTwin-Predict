@@ -3,18 +3,18 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, useGLTF, Center, Bounds } from '@react-three/drei';
 
 function KilnModel(props) {
-  const { scene } = useGLTF('/kiln.glb');
-  const groupRef = useRef();
+  const { scene, nodes } = useGLTF('/kiln.glb');
 
   useFrame(() => {
-    if (groupRef.current) {
-      // Rotate the group that holds the centered model, not the offset CAD model itself
-      groupRef.current.rotation.y -= 0.005;
+    if (nodes['kiln_rotor-1']) {
+      // Only rotate the kiln rotor (the barrel) along its longitudinal X-axis.
+      // This leaves the ground, piers, and frame completely static!
+      nodes['kiln_rotor-1'].rotation.x -= 0.005;
     }
   });
 
   return (
-    <group ref={groupRef} {...props}>
+    <group {...props}>
       <Center>
         <primitive object={scene} />
       </Center>
