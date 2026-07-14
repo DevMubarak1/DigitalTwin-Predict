@@ -256,11 +256,11 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     right: 0;
     z-index: 100;
-    border-radius: 16px 16px 0 0;
-    border-bottom: none;
-    margin-bottom: 0;
-    border-left: none;
-    border-right: none;
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border-glass);
+    border-radius: 20px 20px 0 0;
   }
 
   .sidebar .logo {
@@ -295,11 +295,18 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-    padding: 16px;
+    padding: 20px 16px;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .topbar > div:first-child h2 {
+    font-size: 1.5rem;
   }
 
   .topbar > div:last-child {
-    align-self: flex-end;
+    align-self: flex-start;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .main-content {
@@ -311,10 +318,11 @@ h1, h2, h3, h4, h5, h6 {
   .metrics-container {
     flex-direction: column;
     height: auto;
+    gap: 16px;
   }
 
   .kiln-container {
-    min-height: 400px;
+    min-height: 350px;
   }
 
   .alert-sidebar {

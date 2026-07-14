@@ -37,13 +37,10 @@ export default function KilnDigitalTwin() {
         <ambientLight intensity={1.5} />
         <directionalLight position={[10, 10, 5]} intensity={2} />
         <Environment preset="city" />
-        
         <Suspense fallback={null}>
-          <Bounds fit clip observe margin={1.2}>
-            <Center top position={[0, -2, 0]}>
-              <KilnModel scale={0.01} />
-            </Center>
-          </Bounds>
+          <Center top position={[0, -2, 0]}>
+            <KilnModel scale={0.01} />
+          </Center>
         </Suspense>
 
         <ContactShadows position={[0, -2, 0]} opacity={0.4} scale={20} blur={2} far={4} />
