@@ -1,6 +1,6 @@
 import React, { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, useGLTF } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, useGLTF, Center, Bounds } from '@react-three/drei';
 
 function KilnModel(props) {
   const { scene } = useGLTF('/kiln.glb');
@@ -39,13 +39,15 @@ export default function KilnDigitalTwin() {
         <Environment preset="city" />
         
         <Suspense fallback={null}>
-          <group position={[0, -2, 0]}>
-            <KilnModel scale={2} />
-          </group>
+          <Bounds fit clip observe margin={1.2}>
+            <Center top position={[0, -2, 0]}>
+              <KilnModel scale={0.01} />
+            </Center>
+          </Bounds>
         </Suspense>
 
-        <ContactShadows position={[0, -3.5, 0]} opacity={0.4} scale={20} blur={2} far={4} />
-        <OrbitControls enablePan={true} enableZoom={true} minDistance={2} maxDistance={50} autoRotate={false} />
+        <ContactShadows position={[0, -2, 0]} opacity={0.4} scale={20} blur={2} far={4} />
+        <OrbitControls makeDefault enablePan={true} enableZoom={true} minDistance={1} maxDistance={100} autoRotate={false} />
       </Canvas>
     </div>
   );
