@@ -1,9 +1,10 @@
 import React from 'react';
-import { LayoutDashboard, Activity, Wrench, Settings, Zap } from 'lucide-react';
+import { LayoutDashboard, Activity, Wrench, Settings, Zap, Box } from 'lucide-react';
 
 export default function Sidebar({ activePage, setActivePage }) {
   const navItems = [
     { id: 'Overview', icon: LayoutDashboard },
+    { id: '3D Viewer', icon: Box },
     { id: 'Analytics', icon: Activity },
     { id: 'Maintenance', icon: Wrench },
     { id: 'Settings', icon: Settings },
@@ -21,13 +22,18 @@ export default function Sidebar({ activePage, setActivePage }) {
             key={item.id}
             href="#"
             className={`nav-item ${activePage === item.id ? 'active' : ''}`}
+            style={item.id === '3D Viewer' ? { 
+              background: 'linear-gradient(90deg, rgba(242, 193, 78, 0.1), rgba(232, 67, 46, 0.1))',
+              border: '1px solid rgba(242, 193, 78, 0.3)',
+              boxShadow: '0 4px 12px rgba(242, 193, 78, 0.15)'
+            } : {}}
             onClick={(e) => {
               e.preventDefault();
               setActivePage(item.id);
             }}
           >
-            <item.icon size={20} />
-            {item.id}
+            <item.icon size={20} color={item.id === '3D Viewer' ? 'var(--signal)' : 'currentColor'} />
+            <span style={item.id === '3D Viewer' ? { color: 'var(--signal)', fontWeight: 600 } : {}}>{item.id}</span>
           </a>
         ))}
       </div>

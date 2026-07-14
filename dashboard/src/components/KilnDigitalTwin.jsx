@@ -20,9 +20,9 @@ function KilnModel(props) {
 
 useGLTF.preload('/kiln.glb');
 
-export default function KilnDigitalTwin() {
+export default function KilnDigitalTwin({ isFullScreen = false }) {
   return (
-    <div className="kiln-container glass-panel">
+    <div className="kiln-container glass-panel" style={isFullScreen ? { height: '100%', minHeight: '75vh' } : {}}>
       <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
         <h3>3D Kiln Digital Twin</h3>
         <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Live structural & thermal simulation</p>
@@ -38,7 +38,7 @@ export default function KilnDigitalTwin() {
         <directionalLight position={[10, 10, 5]} intensity={2} />
         <Environment preset="city" />
         <Suspense fallback={null}>
-          <Bounds fit clip margin={1.2}>
+          <Bounds fit clip margin={0.7}>
             <Center top position={[0, -2, 0]}>
               <KilnModel scale={0.05} />
             </Center>

@@ -20,6 +20,8 @@ function App() {
             <MetricsPanel />
           </>
         );
+      case '3D Viewer':
+        return <KilnDigitalTwin isFullScreen={true} />;
       case 'Analytics':
         return <AnalyticsPage />;
       case 'Maintenance':
