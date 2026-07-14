@@ -4,17 +4,21 @@ import { OrbitControls, Environment, ContactShadows, useGLTF, Center, Bounds } f
 
 function KilnModel(props) {
   const { scene } = useGLTF('/kiln.glb');
-  const meshRef = useRef();
+  const groupRef = useRef();
 
   useFrame(() => {
-    if (meshRef.current) {
-      // Slowly rotate the kiln on its main axis
-      meshRef.current.rotation.y -= 0.005;
+    if (groupRef.current) {
+      // Rotate the group that holds the centered model, not the offset CAD model itself
+      groupRef.current.rotation.y -= 0.005;
     }
   });
 
   return (
-    <primitive object={scene} ref={meshRef} {...props} />
+    <group ref={groupRef} {...props}>
+      <Center>
+        <primitive object={scene} />
+      </Center>
+    </group>
   );
 }
 
@@ -39,14 +43,12 @@ export default function KilnDigitalTwin({ isFullScreen = false }) {
         <Environment preset="city" />
         <Suspense fallback={null}>
           <Bounds fit clip margin={0.7}>
-            <Center top position={[0, -2, 0]}>
-              <KilnModel scale={0.05} />
-            </Center>
+            <KilnModel scale={0.05} position={[0, -2, 0]} />
           </Bounds>
         </Suspense>
 
-        <ContactShadows position={[0, -2, 0]} opacity={0.4} scale={20} blur={2} far={4} />
-        <OrbitControls makeDefault enablePan={true} enableZoom={true} minDistance={1} maxDistance={100} autoRotate={false} />
+        <ContactShadows position={[0, -4, 0]} opacity={0.4} scale={20} blur={2} far={4} />
+        <OrbitControls makeDefault target={[0, -2, 0]} enablePan={true} enableZoom={true} minDistance={1} maxDistance={100} autoRotate={false} />
       </Canvas>
     </div>
   );
