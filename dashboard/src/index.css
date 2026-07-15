@@ -238,29 +238,60 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 1024px) {
   .dashboard-layout {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr auto;
+    grid-template-rows: auto 1fr auto;
     height: auto;
     min-height: 100vh;
     gap: 16px;
-    padding: 16px;
+    padding: 12px;
+    padding-bottom: 100px; /* Space for floating nav */
+  }
+
+  .topbar {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(20, 16, 13, 0.85); /* var(--bg-deep) with opacity */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    margin: -12px -12px 0 -12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .topbar > div:first-child h2 {
+    font-size: 1.3rem;
+  }
+
+  .main-content {
+    grid-column: 1;
+    grid-row: 2;
+    overflow: visible;
   }
 
   .sidebar {
     grid-column: 1;
-    grid-row: 4;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 12px;
+    grid-row: unset;
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 48px);
+    max-width: 400px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 24px;
     z-index: 100;
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid var(--border-glass);
-    border-radius: 20px 20px 0 0;
+    background: rgba(31, 26, 22, 0.9); /* var(--surface) with opacity */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 40px; /* Pill shape */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   }
 
   .sidebar .logo {
@@ -269,50 +300,23 @@ h1, h2, h3, h4, h5, h6 {
 
   .sidebar > div {
     flex-direction: row !important;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
     margin-top: 0 !important;
   }
 
   .nav-item {
-    padding: 8px;
+    padding: 8px 12px;
     border-left: none !important;
-    border-bottom: 3px solid transparent;
-    border-radius: 0;
+    border-radius: 20px;
     flex-direction: column;
     gap: 4px;
     font-size: 0.75rem;
   }
 
   .nav-item.active {
-    border-bottom: 3px solid var(--signal);
-    background: transparent;
-  }
-
-  .topbar {
-    grid-column: 1;
-    grid-row: 1;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 20px 16px;
-    border-radius: 0 0 16px 16px;
-  }
-
-  .topbar > div:first-child h2 {
-    font-size: 1.5rem;
-  }
-
-  .topbar > div:last-child {
-    align-self: flex-start;
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .main-content {
-    grid-column: 1;
-    grid-row: 2;
-    overflow: visible;
+    background: rgba(242, 193, 78, 0.15); /* var(--signal) alpha */
+    color: var(--signal);
   }
 
   .metrics-container {
@@ -322,13 +326,13 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .kiln-container {
-    min-height: 350px;
+    min-height: 300px;
   }
 
   .alert-sidebar {
     grid-column: 1;
     grid-row: 3;
     overflow: visible;
-    margin-bottom: 80px; /* space for bottom nav */
+    padding: 16px;
   }
 }
