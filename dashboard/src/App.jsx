@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
 import KilnDigitalTwin from './components/KilnDigitalTwin';
@@ -7,9 +7,17 @@ import AlertSystem from './components/AlertSystem';
 import AnalyticsPage from './components/AnalyticsPage';
 import MaintenancePage from './components/MaintenancePage';
 import SettingsPage from './components/SettingsPage';
+import { kilnState } from './utils/kilnRomSurrogate';
 
 function App() {
   const [activePage, setActivePage] = useState('Overview');
+  const [clearanceMm, setClearanceMm] = useState(0);
+  const [alertThreshold, setAlertThreshold] = useState(60);
+  const [kData, setKData] = useState(() => kilnState(0));
+
+  useEffect(() => {
+    setKData(kilnState(clearanceMm));
+  }, [clearanceMm]);
 
   const renderContent = () => {
     switch (activePage) {
@@ -17,7 +25,7 @@ function App() {
         return (
           <>
             <KilnDigitalTwin />
-            <MetricsPanel />
+            <MetricsPanel clearanceMm={clearanceMm} setClearanceMm={setClearanceMm} kData={kData} />
           </>
         );
       case '3D Viewer':
@@ -27,7 +35,7 @@ function App() {
       case 'Maintenance':
         return <MaintenancePage />;
       case 'Settings':
-        return <SettingsPage />;
+        return <SettingsPage alertThreshold={alertThreshold} setAlertThreshold={setAlertThreshold} />;
       default:
         return null;
     }
@@ -40,7 +48,7 @@ function App() {
       <div className="main-content">
         {renderContent()}
       </div>
-      <AlertSystem />
+      <AlertSystem kData={kData} alertThreshold={alertThreshold} clearanceMm={clearanceMm} />
     </div>
   );
 }
