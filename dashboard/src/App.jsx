@@ -4,8 +4,6 @@ import TopBar from './components/TopBar';
 import KilnDigitalTwin from './components/KilnDigitalTwin';
 import MetricsPanel from './components/MetricsPanel';
 import AlertSystem from './components/AlertSystem';
-import AnalyticsPage from './components/AnalyticsPage';
-import MaintenancePage from './components/MaintenancePage';
 import SettingsPage from './components/SettingsPage';
 import { kilnState } from './utils/kilnRomSurrogate';
 
@@ -30,10 +28,6 @@ function App() {
         );
       case '3D Viewer':
         return <KilnDigitalTwin isFullScreen={true} />;
-      case 'Analytics':
-        return <AnalyticsPage />;
-      case 'Maintenance':
-        return <MaintenancePage />;
       case 'Settings':
         return <SettingsPage alertThreshold={alertThreshold} setAlertThreshold={setAlertThreshold} />;
       default:

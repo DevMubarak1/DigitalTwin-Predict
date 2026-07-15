@@ -64,6 +64,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100vh;
   gap: 24px;
   padding: 24px;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -90,7 +91,9 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 24px;
 }
 
 .alert-sidebar {
@@ -244,6 +247,7 @@ h1, h2, h3, h4, h5, h6 {
     gap: 16px;
     padding: 12px;
     padding-bottom: 100px; /* Space for floating nav */
+    overflow: visible;
   }
 
   .topbar {
