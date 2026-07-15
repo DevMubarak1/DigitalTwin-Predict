@@ -9,7 +9,7 @@ export default function MetricsPanel({ clearanceMm, setClearanceMm, kData }) {
   const zoneChartData = zones.map(z => ({
     name: z.zone.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()),
     rul: Math.floor(z.rul_days),
-    ovality: parseFloat(z.omega_max.toFixed(2)),
+    ovality: parseFloat(z.omega_pct.toFixed(2)),
     isGoverning: z.zone === governing_zone
   }));
 
