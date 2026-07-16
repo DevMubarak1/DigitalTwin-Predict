@@ -153,9 +153,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .metrics-container {
-  height: 300px;
+  /* was height:300px, which clipped the wrapped cards and let the panel below
+     overlap them. The row wraps to two lines, so let it size to its content. */
+  min-height: 300px;
   display: flex;
   gap: 24px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
 }
 
 .metric-card {
@@ -163,6 +167,13 @@ h1, h2, h3, h4, h5, h6 {
   padding: 20px;
   display: flex;
   flex-direction: column;
+}
+
+/* A .metric-card placed directly in .main-content (a column flex container)
+   would inherit flex:1 and stretch to fill the viewport. Panels at that level
+   must size to their content instead. */
+.main-content > .metric-card {
+  flex: 0 0 auto;
 }
 
 .metric-value {

@@ -3,7 +3,12 @@
  * ===================================================================
  * Maps a mechanical fault -> shell ovality (per tyre) -> per-zone wear rate -> RUL.
  * 
- * Ported from the original pure Python implementation `kiln_rom_surrogate.py`
+ * Ported from the pure Python implementation `kiln_rom_surrogate.py`, which is
+ * the source of truth. If the FEA is re-run, update BOTH.
+ *
+ * Coefficients verified against kiln_rom_surrogate.py on 16 Jul 2026.
+ *   kilnState(0)  -> burning,          499 d
+ *   kilnState(15) -> upper_transition, 202 d
  */
 
 // 1. OVALITY SURROGATE (REAL — fitted to FEA design points)
@@ -17,6 +22,15 @@ const OVALITY_FIT = {
 
 const OMEGA_ALLOW = 0.5;   // % — allowable ovality, D_inside/10 rule
 
+export const CAD_GAP_MM = 90.0;
+
+export function clearanceFromAnsysOffset(offset_mm) {
+    /** Ansys contact offset [mm] -> physical radial clearance [mm].
+     *  The offset CLOSES the 90 mm CAD gap; what remains is the clearance.
+     *  offset 75 -> clearance 15.  Adjust-to-Touch (offset 90) -> clearance 0. */
+    return Math.max(0.0, CAD_GAP_MM - offset_mm);
+}
+
 export function ovalityFromClearance(clearance_mm, station = 2) {
     /** Shell ovality Omega [%] at a tyre, for a given radial tyre clearance [mm]. */
     const [o0, A] = OVALITY_FIT[station];
@@ -27,7 +41,7 @@ export function ovalityFromClearance(clearance_mm, station = 2) {
 // 2. WEAR MULTIPLIER + RUL (structure REAL, coefficients PLACEHOLDER)
 const ZONES = {
     // zone : [nearest_station, thickness_mm, w0_mm_per_day, k, n]
-    "lower_transition": [1, 250, 0.35, 0.14, 2.0],  // mag-chrome, 1.0-9.4 m
+    "lower_transition": [1, 250, 0.35, 0.15, 2.0],  // mag-chrome, 1.0-9.4 m
     "burning":          [1, 250, 0.50, 0.11, 2.0],  // mag-spinel, 9.4-24.6 m
     "upper_transition": [2, 250, 0.45, 0.15, 2.0],  // 24.6-33.2 m
     "calcining":        [2, 200, 0.25, 0.11, 2.0],  // hi-alumina+SiC, 33.2-60.2 m
