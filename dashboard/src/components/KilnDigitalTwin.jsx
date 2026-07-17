@@ -1,15 +1,67 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, useGLTF, Center, Bounds } from '@react-three/drei';
+import * as THREE from 'three';
+import { shellTemperature, liningAfter, ZONE_THERMAL } from '../utils/kilnThermalChannel';
 
-function KilnModel(props) {
+function KilnModel({ campaignDay = 0, clearanceMm = 0, coatingLost = false, ...props }) {
   const { scene, nodes } = useGLTF('/kiln.glb');
 
-  useFrame(() => {
+  // Compute thermal and mechanical state
+  const { tMax, ovalityFactor } = useMemo(() => {
+    let maxT = 300;
+    try {
+      const thickness = liningAfter(campaignDay, clearanceMm);
+      maxT = Math.max(...Object.keys(ZONE_THERMAL).map(z => {
+        const coat = (z === 'burning' && coatingLost) ? 0.0 : null;
+        return shellTemperature(z, thickness[z], coat);
+      }));
+    } catch(e) { }
+
+    const wobble = Math.min(1.0, clearanceMm / 30.0);
+    return { tMax: maxT, ovalityFactor: wobble };
+  }, [campaignDay, clearanceMm, coatingLost]);
+
+  // Clone material to avoid mutating shared GLTF cache
+  const rotorMat = useMemo(() => {
+    if (nodes['kiln_rotor-1'] && nodes['kiln_rotor-1'].material) {
+      const mat = nodes['kiln_rotor-1'].material.clone();
+      nodes['kiln_rotor-1'].material = mat;
+      return mat;
+    }
+    return null;
+  }, [nodes]);
+
+  useFrame((state) => {
     if (nodes['kiln_rotor-1']) {
-      // Only rotate the kiln rotor (the barrel) along its longitudinal X-axis.
-      // This leaves the ground, piers, and frame completely static!
-      nodes['kiln_rotor-1'].rotation.x -= 0.005;
+      const rotor = nodes['kiln_rotor-1'];
+      // Rotate the kiln rotor (the barrel) along its longitudinal X-axis.
+      rotor.rotation.x -= 0.005;
+
+      // Mechanical Channel (Ovality): Wobble based on clearance
+      const time = state.clock.getElapsedTime();
+      const wobbleAmount = ovalityFactor * 0.08; 
+      rotor.position.y = Math.sin(time * 3) * wobbleAmount;
+      rotor.position.z = Math.cos(time * 3) * wobbleAmount;
+      
+      // Thermal Channel: Heat map tinting
+      if (rotorMat) {
+        const targetColor = new THREE.Color();
+        if (tMax < 350) {
+          targetColor.set('#3a3b3c'); // Healthy steel
+        } else if (tMax < 420) {
+          targetColor.lerpColors(new THREE.Color('#3a3b3c'), new THREE.Color('#e67e22'), (tMax - 350) / 70); // Warning orange
+        } else {
+          targetColor.lerpColors(new THREE.Color('#e67e22'), new THREE.Color('#d03b3b'), Math.min(1, (tMax - 420) / 30)); // Critical red
+        }
+        
+        rotorMat.color.lerp(targetColor, 0.05);
+        if (tMax > 380) {
+          rotorMat.emissive.copy(targetColor).multiplyScalar(Math.min(0.5, (tMax - 380) / 100));
+        } else {
+          rotorMat.emissive.setHex(0x000000);
+        }
+      }
     }
   });
 
@@ -24,7 +76,7 @@ function KilnModel(props) {
 
 useGLTF.preload('/kiln.glb');
 
-export default function KilnDigitalTwin({ isFullScreen = false }) {
+export default function KilnDigitalTwin({ isFullScreen = false, campaignDay = 0, clearanceMm = 0, coatingLost = false }) {
   return (
     <div className="kiln-container glass-panel" style={isFullScreen ? { height: '100%', minHeight: '75vh' } : {}}>
       <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
@@ -43,7 +95,7 @@ export default function KilnDigitalTwin({ isFullScreen = false }) {
         <Environment preset="city" />
         <Suspense fallback={null}>
           <Bounds fit clip margin={0.7}>
-            <KilnModel scale={0.05} position={[0, -2, 0]} />
+            <KilnModel scale={0.05} position={[0, -2, 0]} campaignDay={campaignDay} clearanceMm={clearanceMm} coatingLost={coatingLost} />
           </Bounds>
         </Suspense>
 

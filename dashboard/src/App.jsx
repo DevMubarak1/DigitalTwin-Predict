@@ -63,7 +63,7 @@ function App() {
       case 'Overview':
         return (
           <>
-            <KilnDigitalTwin />
+            <KilnDigitalTwin campaignDay={campaignDay} clearanceMm={clearanceMm} coatingLost={coatingLost} />
             <CampaignClock
               day={campaignDay} setDay={(d) => { setManualFault(false); setCampaignDay(d); }}
               playing={playing}
@@ -89,7 +89,7 @@ function App() {
       case '3D Viewer':
         return (
           <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-            <KilnDigitalTwin isFullScreen={true} />
+            <KilnDigitalTwin isFullScreen={true} campaignDay={campaignDay} clearanceMm={clearanceMm} coatingLost={coatingLost} />
             <div style={{ position: 'absolute', bottom: '20px', right: '20px', width: '380px', zIndex: 100, maxHeight: 'calc(100vh - 80px)', overflowY: 'auto' }}>
               <CampaignClock
                 day={campaignDay} setDay={(d) => { setManualFault(false); setCampaignDay(d); }}
