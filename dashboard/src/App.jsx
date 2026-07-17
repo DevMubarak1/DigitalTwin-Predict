@@ -5,6 +5,7 @@ import KilnDigitalTwin from './components/KilnDigitalTwin';
 import MetricsPanel from './components/MetricsPanel';
 import ThermalPanel from './components/ThermalPanel';
 import CampaignClock from './components/CampaignClock';
+import CampaignBar from './components/CampaignBar';
 import TwoChannelVerdict from './components/TwoChannelVerdict';
 import AlertSystem from './components/AlertSystem';
 import SettingsPage from './components/SettingsPage';
@@ -114,19 +115,19 @@ function App() {
               maxShellTemp={thermalInfo.maxTemp}
               thermalBand={thermalInfo.band}
             />
-            <div style={{ position: 'absolute', bottom: '20px', right: '20px', width: '380px', zIndex: 100, maxHeight: 'calc(100vh - 80px)', overflowY: 'auto' }}>
-              <CampaignClock
-                day={campaignDay} setDay={(d) => { setManualFault(false); setCampaignDay(d); }}
-                playing={playing}
-                setPlaying={(p) => { if (p) setManualFault(false); setPlaying(p); }}
-                speed={speed} setSpeed={setSpeed}
-                coatingLost={coatingLost} setCoatingLost={setCoatingLost}
-                tyreWearRate={tyreWearRate} setTyreWearRate={setTyreWearRate}
-                manualFault={manualFault} setManualFault={setManualFault}
-                minRul={kData.min_rul_days} clearanceMm={clearanceMm}
-                setClearanceMm={handleManualClearance}
-              />
-            </div>
+            <CampaignBar
+              day={campaignDay} setDay={(d) => { setManualFault(false); setCampaignDay(d); }}
+              playing={playing}
+              setPlaying={(p) => { if (p) setManualFault(false); setPlaying(p); }}
+              speed={speed} setSpeed={setSpeed}
+              coatingLost={coatingLost} setCoatingLost={setCoatingLost}
+              tyreWearRate={tyreWearRate} setTyreWearRate={setTyreWearRate}
+              manualFault={manualFault} setManualFault={setManualFault}
+              minRul={kData.min_rul_days} clearanceMm={clearanceMm}
+              setClearanceMm={handleManualClearance}
+              maxShellTemp={thermalInfo.maxTemp}
+              thermalBand={thermalInfo.band}
+            />
           </div>
         );
       case 'Settings':

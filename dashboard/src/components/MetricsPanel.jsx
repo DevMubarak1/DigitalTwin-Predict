@@ -20,7 +20,7 @@ export default function MetricsPanel({ kData }) {
 
 
       {/* Ovality Channel (Derived from AI Surrogate) */}
-      <div className="metric-card glass-panel" style={{ flex: '1 1 calc(50% - 12px)', display: 'flex', flexDirection: 'column' }}>
+      <div className="metric-card glass-panel" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column' }}>
         <div className="metric-label">Max Shell Ovality (%)</div>
         <div className="metric-value" style={{ color: maxOvality > 0.3 ? 'var(--status-red)' : 'var(--status-orange)' }}>
           {maxOvality}%
@@ -45,7 +45,7 @@ export default function MetricsPanel({ kData }) {
       </div>
 
       {/* Mechanical Channel: RUL per Zone */}
-      <div className="metric-card glass-panel" style={{ flex: '1 1 calc(50% - 12px)', display: 'flex', flexDirection: 'column' }}>
+      <div className="metric-card glass-panel" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column' }}>
         <div className="metric-label">Remaining Useful Life (Governing: {governing_zone.replace('_', ' ')})</div>
         <div className="metric-value" style={{ color: min_rul_days < 60 ? 'var(--status-red)' : 'var(--accent-cyan)' }}>
           {latestRul} Days

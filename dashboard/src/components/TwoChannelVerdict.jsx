@@ -51,7 +51,7 @@ export default function TwoChannelVerdict({ kData, campaignDay, clearanceMm, coa
 
   const Channel = ({ title, alarm, value, unit, detail, note }) => (
     <div style={{
-      flex: '1 1 calc(50% - 8px)', minWidth: '220px', padding: '14px',
+      flex: '1 1 300px', padding: '14px',
       borderRadius: '10px', background: 'rgba(255,255,255,0.03)',
       border: `1px solid ${alarm ? 'rgba(208,59,59,0.45)' : 'rgba(255,255,255,0.10)'}`,
     }}>

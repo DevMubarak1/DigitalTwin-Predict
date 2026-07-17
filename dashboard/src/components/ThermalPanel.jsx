@@ -52,7 +52,7 @@ export default function ThermalPanel({ campaignDay, clearanceMm, coatingLost }) 
       <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '20px' }}>
         {rows.map(r => (
           <div key={r.zone} style={{
-            flex: '1 1 calc(25% - 12px)', minWidth: '150px', padding: '12px',
+            flex: '1 1 200px', minWidth: '150px', padding: '12px',
             background: 'rgba(255,255,255,0.03)', borderRadius: '10px',
             borderLeft: `3px solid ${BAND_COLOR[r.band]}`,
           }}>
