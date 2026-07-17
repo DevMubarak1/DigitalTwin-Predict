@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
-export default function MetricsPanel({ clearanceMm, setClearanceMm, kData }) {
+export default function MetricsPanel({ kData }) {
   const { min_rul_days, governing_zone, zones } = kData;
   const latestRul = Math.floor(min_rul_days);
 

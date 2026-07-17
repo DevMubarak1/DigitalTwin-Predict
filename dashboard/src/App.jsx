@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
 import KilnDigitalTwin from './components/KilnDigitalTwin';
@@ -9,6 +9,7 @@ import TwoChannelVerdict from './components/TwoChannelVerdict';
 import AlertSystem from './components/AlertSystem';
 import SettingsPage from './components/SettingsPage';
 import { kilnState } from './utils/kilnRomSurrogate';
+import { thermalState, ZONE_THERMAL, liningAfter, thermalBand } from './utils/kilnThermalChannel';
 
 function App() {
   const [activePage, setActivePage] = useState('Overview');
@@ -31,6 +32,17 @@ function App() {
   useEffect(() => {
     setKData(kilnState(clearanceMm));
   }, [clearanceMm]);
+
+  // Compute live thermal state for the 3D viewer
+  const thermalInfo = useMemo(() => {
+    const lining = liningAfter(campaignDay, clearanceMm);
+    const rows = Object.keys(ZONE_THERMAL).map(z => {
+      const t = thermalState(z, lining[z], coatingLost ? 0 : null);
+      return t;
+    });
+    const hottest = rows.reduce((p, c) => (p.t_shell_c > c.t_shell_c ? p : c));
+    return { maxTemp: hottest.t_shell_c, band: thermalBand(hottest.t_shell_c) };
+  }, [campaignDay, clearanceMm, coatingLost]);
 
   useEffect(() => {
     if (!playing) return undefined;
@@ -63,7 +75,13 @@ function App() {
       case 'Overview':
         return (
           <>
-            <KilnDigitalTwin />
+            <KilnDigitalTwin
+              clearanceMm={clearanceMm}
+              kData={kData}
+              campaignDay={campaignDay}
+              maxShellTemp={thermalInfo.maxTemp}
+              thermalBand={thermalInfo.band}
+            />
             <CampaignClock
               day={campaignDay} setDay={(d) => { setManualFault(false); setCampaignDay(d); }}
               playing={playing}
@@ -79,8 +97,7 @@ function App() {
               kData={kData} campaignDay={campaignDay}
               clearanceMm={clearanceMm} coatingLost={coatingLost}
             />
-            <MetricsPanel clearanceMm={clearanceMm} setClearanceMm={handleManualClearance}
-                          kData={kData} playing={playing} />
+            <MetricsPanel kData={kData} />
             <ThermalPanel
               campaignDay={campaignDay} clearanceMm={clearanceMm} coatingLost={coatingLost}
             />
@@ -89,7 +106,14 @@ function App() {
       case '3D Viewer':
         return (
           <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-            <KilnDigitalTwin isFullScreen={true} />
+            <KilnDigitalTwin
+              isFullScreen={true}
+              clearanceMm={clearanceMm}
+              kData={kData}
+              campaignDay={campaignDay}
+              maxShellTemp={thermalInfo.maxTemp}
+              thermalBand={thermalInfo.band}
+            />
             <div style={{ position: 'absolute', bottom: '20px', right: '20px', width: '380px', zIndex: 100, maxHeight: 'calc(100vh - 80px)', overflowY: 'auto' }}>
               <CampaignClock
                 day={campaignDay} setDay={(d) => { setManualFault(false); setCampaignDay(d); }}
