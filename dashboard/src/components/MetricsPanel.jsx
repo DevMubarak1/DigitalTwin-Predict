@@ -17,31 +17,7 @@ export default function MetricsPanel({ clearanceMm, setClearanceMm, kData }) {
 
   return (
     <div className="metrics-container" style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', marginTop: '24px' }}>
-      {/* Fault Injector Panel */}
-      <div className="metric-card glass-panel" style={{ flex: '1 1 100%' }}>
-        <div className="metric-label" style={{ marginBottom: '16px', fontSize: '1.2rem', color: 'var(--text-primary)' }}>
-          Fault Injector: Mechanical Surrogate
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
-            <span>Tyre Clearance / Creep</span>
-            <span>{clearanceMm} mm</span>
-          </div>
-          <input 
-            type="range" 
-            min="0" 
-            max="30" 
-            step="1" 
-            value={clearanceMm} 
-            onChange={(e) => setClearanceMm(Number(e.target.value))}
-            style={{ width: '100%', accentColor: 'var(--accent-blue)', cursor: 'pointer' }}
-          />
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-            <span>Healthy (0mm)</span>
-            <span>Critical Fault (30mm)</span>
-          </div>
-        </div>
-      </div>
+
 
       {/* Ovality Channel (Derived from AI Surrogate) */}
       <div className="metric-card glass-panel" style={{ flex: '1 1 calc(50% - 12px)', display: 'flex', flexDirection: 'column' }}>

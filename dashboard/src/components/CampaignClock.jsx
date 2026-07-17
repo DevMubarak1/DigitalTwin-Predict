@@ -16,7 +16,7 @@ import React from 'react';
 export default function CampaignClock({ day, setDay, playing, setPlaying, speed, setSpeed,
                                         coatingLost, setCoatingLost, minRul,
                                         tyreWearRate, setTyreWearRate,
-                                        manualFault, setManualFault, clearanceMm }) {
+                                        manualFault, setManualFault, clearanceMm, setClearanceMm }) {
   const YEAR = 365;
   const pct = Math.min(100, (day / YEAR) * 100);
   const daysLeft = Math.max(0, Math.round(minRul - day));
@@ -121,6 +121,27 @@ export default function CampaignClock({ day, setDay, playing, setPlaying, speed,
         <span>Day 0, fresh lining</span>
         <span>{Math.round(pct)} % through a one-year campaign</span>
         <span>Day {YEAR}</span>
+      </div>
+
+      {/* Fault Injector Panel */}
+      <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+          <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>Fault Injector: Tyre Clearance</span>
+          <span style={{ fontSize: '0.8rem' }}>{clearanceMm} mm</span>
+        </div>
+        <input 
+          type="range" 
+          min="0" 
+          max="30" 
+          step="1" 
+          value={clearanceMm} 
+          onChange={(e) => setClearanceMm && setClearanceMm(Number(e.target.value))}
+          style={{ width: '100%', accentColor: 'var(--accent-blue)', cursor: 'pointer' }}
+        />
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+          <span>Healthy (0mm)</span>
+          <span>Critical Fault (30mm)</span>
+        </div>
       </div>
     </div>
   );

@@ -73,6 +73,7 @@ function App() {
               tyreWearRate={tyreWearRate} setTyreWearRate={setTyreWearRate}
               manualFault={manualFault} setManualFault={setManualFault}
               minRul={kData.min_rul_days} clearanceMm={clearanceMm}
+              setClearanceMm={handleManualClearance}
             />
             <TwoChannelVerdict
               kData={kData} campaignDay={campaignDay}
@@ -86,7 +87,24 @@ function App() {
           </>
         );
       case '3D Viewer':
-        return <KilnDigitalTwin isFullScreen={true} />;
+        return (
+          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <KilnDigitalTwin isFullScreen={true} />
+            <div style={{ position: 'absolute', bottom: '20px', right: '20px', width: '380px', zIndex: 100, maxHeight: 'calc(100vh - 80px)', overflowY: 'auto' }}>
+              <CampaignClock
+                day={campaignDay} setDay={(d) => { setManualFault(false); setCampaignDay(d); }}
+                playing={playing}
+                setPlaying={(p) => { if (p) setManualFault(false); setPlaying(p); }}
+                speed={speed} setSpeed={setSpeed}
+                coatingLost={coatingLost} setCoatingLost={setCoatingLost}
+                tyreWearRate={tyreWearRate} setTyreWearRate={setTyreWearRate}
+                manualFault={manualFault} setManualFault={setManualFault}
+                minRul={kData.min_rul_days} clearanceMm={clearanceMm}
+                setClearanceMm={handleManualClearance}
+              />
+            </div>
+          </div>
+        );
       case 'Settings':
         return <SettingsPage alertThreshold={alertThreshold} setAlertThreshold={setAlertThreshold} />;
       default:
