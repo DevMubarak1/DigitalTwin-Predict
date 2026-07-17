@@ -1,7 +1,6 @@
 import React from 'react';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine, Legend } from 'recharts';
-import { thermalState, T_SHELL_WARN, T_SHELL_CRIT, ZONE_THERMAL } from '../utils/kilnThermalChannel';
-import { kilnState } from '../utils/kilnRomSurrogate';
+import { thermalState, T_SHELL_WARN, T_SHELL_CRIT, ZONE_THERMAL, liningAfter } from '../utils/kilnThermalChannel';
 
 const LABEL = {
   lower_transition: 'Lower Transition',
@@ -13,21 +12,7 @@ const BAND_COLOR = { green: 'var(--status-green, #0ca30c)', amber: '#fab219', re
 const BAND_TEXT = { green: 'Normal', amber: 'Hot', red: 'Critical' };
 const BAND_ICON = { green: '●', amber: '▲', red: '■' };
 
-/**
- * Remaining brick per zone after `day` days at the wear rate the mechanical
- * surrogate predicts for the current clearance. This is what couples the two
- * channels: the mechanical fault sets the wear rate, wear thins the brick, and
- * the thinner brick is what the shell scanner eventually sees.
- */
-export function liningAfter(day, clearanceMm) {
-  const k = kilnState(clearanceMm);
-  const out = {};
-  k.zones.forEach(z => {
-    const full = ZONE_THERMAL[z.zone].brick * 1000.0;
-    out[z.zone] = Math.max(full * 0.05, full - z.wear_mm_day * day);
-  });
-  return out;
-}
+
 
 export default function ThermalPanel({ campaignDay, clearanceMm, coatingLost }) {
   const lining = liningAfter(campaignDay, clearanceMm);

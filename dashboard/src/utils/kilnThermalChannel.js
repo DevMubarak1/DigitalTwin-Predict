@@ -1,3 +1,5 @@
+import { kilnState } from './kilnRomSurrogate';
+
 /**
  * Obajana Line 4 kiln - THERMAL channel (the shell-scanner estimator)
  * ===================================================================
@@ -134,4 +136,20 @@ export function thermalKilnState(wornFraction = 0.0, coatingLost = false) {
         max_t_shell_c: worst.t_shell_c,
         band: thermalBand(worst.t_shell_c),
     };
+}
+
+/**
+ * Remaining brick per zone after `day` days at the wear rate the mechanical
+ * surrogate predicts for the current clearance. This is what couples the two
+ * channels: the mechanical fault sets the wear rate, wear thins the brick, and
+ * the thinner brick is what the shell scanner eventually sees.
+ */
+export function liningAfter(day, clearanceMm) {
+  const k = kilnState(clearanceMm);
+  const out = {};
+  k.zones.forEach(z => {
+    const full = ZONE_THERMAL[z.zone].brick * 1000.0;
+    out[z.zone] = Math.max(full * 0.05, full - z.wear_mm_day * day);
+  });
+  return out;
 }

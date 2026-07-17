@@ -1,8 +1,6 @@
 import React from 'react';
 import { ShieldAlert, Info, Thermometer, Activity, Clock } from 'lucide-react';
-import { thermalState, T_SHELL_WARN, T_SHELL_CRIT, ZONE_THERMAL } from '../utils/kilnThermalChannel';
-import { liningAfter } from './ThermalPanel';
-
+import { thermalState, T_SHELL_WARN, T_SHELL_CRIT, ZONE_THERMAL, liningAfter } from '../utils/kilnThermalChannel';
 const OMEGA_ALLOW = 0.5;
 const U_AMBER = 1.0;
 const U_RED = 2.5;   // rounded down from the computed 2.56 at which the governing

@@ -1,6 +1,5 @@
 import React from 'react';
-import { thermalState, T_SHELL_WARN, ZONE_THERMAL } from '../utils/kilnThermalChannel';
-import { liningAfter } from './ThermalPanel';
+import { thermalState, T_SHELL_WARN, ZONE_THERMAL, liningAfter } from '../utils/kilnThermalChannel';
 
 const OMEGA_ALLOW = 0.5;
 const U_RED = 2.5;   // rounded DOWN from the computed 2.56 at which the governing
